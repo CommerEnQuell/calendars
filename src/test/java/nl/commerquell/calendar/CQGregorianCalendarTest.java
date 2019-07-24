@@ -13,10 +13,10 @@ class CQGregorianCalendarTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		this.testDate = new CQGregorianCalendar(24, 7, -586);
-		this.fixedValue = -214193;
-		this.weekNumber = 29;
-		this.dayOfCal = -214193;
+		this.testDate = new CQGregorianCalendar(1, 3, 1900);
+		this.fixedValue = 693655;
+		this.weekNumber = 9;
+		this.dayOfCal = 693655;
 	}
 
 	@Test

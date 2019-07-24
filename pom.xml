@@ -2,13 +2,22 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.commerquell</groupId>
   <artifactId>calendars</artifactId>
-  <version>0.0.1-NEXTDAY</version>
+  <version>0.0.2-JULICOR</version>
   <name>calendars</name>
   <description>Calendar calculation and conversion project</description>
   <properties>
   	<maven.compiler.source>1.8</maven.compiler.source>
   	<maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+  <dependencies>
+         <!-- junit 5, unit test -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.1</version>
+            <scope>test</scope>
+        </dependency>
+  </dependencies>
   <build>
 	  <plugins>
 	  	<plugin>

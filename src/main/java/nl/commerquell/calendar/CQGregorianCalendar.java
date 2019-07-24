@@ -86,8 +86,8 @@ public class CQGregorianCalendar extends CQCalendar {
 	
 	// Let's do business...
 	
-		int julDate = theFixed + 306;
-		julDate += ((julDate - 1)/ 36525);
+		int julDate = theFixed + DAY_OF_YEAR[0];
+		julDate += ((julDate - 1)/ 36524);
 		julDate -= ((julDate - 1)/ 146100);
 		
 		int year = 4 * (julDate - 1) / 1461;

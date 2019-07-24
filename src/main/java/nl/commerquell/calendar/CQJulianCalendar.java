@@ -103,6 +103,9 @@ public class CQJulianCalendar extends CQCalendar {
 			}
 		}
 		month = (idx > 0 ? idx : MONTHS);
+		if (month < 3) {
+			year++;
+		}
 		idx = month - 1;
 		theFixed -= DAY_OF_YEAR[idx];
 		int day = theFixed;
