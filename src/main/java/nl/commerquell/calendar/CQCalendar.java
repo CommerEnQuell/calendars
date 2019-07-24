@@ -5,6 +5,9 @@ import java.util.function.Predicate;
 import nl.commerquell.calendar.error.BogusDateException;
 
 public abstract class CQCalendar {
+	private static final String[] daysOfWeek =
+		{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+	
 	public static final int BOGUS = Integer.MIN_VALUE;
 	public static final int DAY = 0;
 	public static final int MONTH = 1;
@@ -19,9 +22,16 @@ public abstract class CQCalendar {
 	public abstract boolean inLeapYear();
 	public abstract int epoch();
 	public abstract boolean isValid();
+	public abstract int getCalendarType();
 	
 	protected boolean testLeap(int n, Predicate<Integer> p) {
 		return p.test(n);
+	}
+	
+	public int[] getCycleValues() {
+		int[] retval = new int[this.cycleValues.length];
+		System.arraycopy(this.cycleValues, 0, retval, 0, this.cycleValues.length);
+		return retval;
 	}
 	
 	public int get(int idx) {
@@ -51,6 +61,10 @@ public abstract class CQCalendar {
 		return amod(toFixed(), 7);
 	}
 	
+	public int getWeekNumber() {
+		return -1;
+	}
+	
 	protected void assertIsValid() {
 		if (!isValid()) {
 			throw new BogusDateException("Invalid date for this calendar: " + this);
@@ -75,5 +89,19 @@ public abstract class CQCalendar {
 		}
 		return isEqual;
 		
+	}
+	
+	public static String[] getDaysOfWeek() {
+		String[] days = new String[daysOfWeek.length];
+		System.arraycopy(daysOfWeek, 0, days, 0, daysOfWeek.length);
+		return days;
+	}
+	
+	public static int diff(CQCalendar ldate, CQCalendar rdate) {
+		return rdate.toFixed() - ldate.toFixed();
+	}
+	
+	public final int dayOfCalendar() {
+		return toFixed() + 1 - epoch();
 	}
 }

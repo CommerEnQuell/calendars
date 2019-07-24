@@ -2,7 +2,7 @@ package nl.commerquell.calendar;
 
 import nl.commerquell.calendar.error.BogusDateException;
 
-@Cycles
+@Cycles(months= {"Nisan", "Iyyar", "Sivan", "Tammuz", "Av", "Elul", "Tishrei", "Cheshvan", "Kislev", "Tevet", "Shevat", "Adar I", "Adar II"})
 public class CQHebrewCalendar extends CQCalendar {
 	public static final int EPOCH = -1373427;
 	public static final int MONTHS = 13;
@@ -164,6 +164,11 @@ public class CQHebrewCalendar extends CQCalendar {
 		int month = (idx > 6 ? idx - 6 : idx + 7);
 		
 		return new CQHebrewCalendar(day, month, year);
+	}
+	
+	@Override
+	public int getCalendarType() {
+		return 3;
 	}
 
 	@Override

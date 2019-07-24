@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 class CQHebrewCalendarTest {
 	private CQHebrewCalendar cal;
 	private int fixed = 507850;
+	private int dayOfCal = 1881278;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -35,10 +36,20 @@ class CQHebrewCalendarTest {
 			}
 		}
 	}
+	
+	@Test
+	void testDayOfCalendar() {
+		int calcDay = cal.dayOfCalendar();
+		if (calcDay != dayOfCal) {
+			fail("Calculated day# of calendar: " + calcDay + ",  should be " + this.dayOfCal);
+		}
+	}
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
+		testToFixed();
+		testFromFixed();
+		testDayOfCalendar();
 	}
 
 }

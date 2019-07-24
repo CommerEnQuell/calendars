@@ -9,5 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface Cycles {
-	String[] cycles() default {"DAY", "MONTH", "YEAR"};
+	String[] cycles() default {"Day", "Month", "Year"};
+	String[] months() default {"January", "February", "March", "April", "May", "June",
+							   "July", "August", "September", "October", "November", "December"};
 }

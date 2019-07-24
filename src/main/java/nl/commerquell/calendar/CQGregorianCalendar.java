@@ -123,6 +123,27 @@ public class CQGregorianCalendar extends CQCalendar {
 		
 		return new CQGregorianCalendar(day, month, year);
 	}
+	
+	@Override
+	public int getCalendarType() {
+		return 1;
+	}
+	
+	@Override
+	public int getWeekNumber() {
+		int year = cycleValues[2];
+		int thisDate = toFixed();
+		int anchor = new CQGregorianCalendar(4, 1, year).toFixed();
+		anchor -= amod(anchor, 7);
+		if (thisDate < anchor) {
+			year--;
+			anchor = new CQGregorianCalendar(4, 1, year).toFixed();
+			anchor -= amod(anchor, 7);
+		}
+		int dayInYear = thisDate - anchor;
+		int retval = 1 + (dayInYear - 1) / 7;
+		return retval;
+	}
 
 	@Override
 	public String toString() {

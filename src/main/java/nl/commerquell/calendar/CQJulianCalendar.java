@@ -1,5 +1,6 @@
 package nl.commerquell.calendar;
 
+@Cycles
 public class CQJulianCalendar extends CQCalendar {
 	public static final int EPOCH = -1;
 	public static final int MONTHS = 12;
@@ -43,8 +44,7 @@ public class CQJulianCalendar extends CQCalendar {
 
 	@Override
 	public boolean inLeapYear() {
-		// TODO Auto-generated method stub
-		return false;
+		return testLeap(cycleValues[2], year -> (year + (year < 0 ? 1 : 0)) % 4 == 0);
 	}
 
 	@Override
@@ -112,6 +112,27 @@ public class CQJulianCalendar extends CQCalendar {
 		}
 		
 		return new CQJulianCalendar(day, month, year);
+	}
+	
+	@Override
+	public int getCalendarType() {
+		return 2;
+	}
+	
+	@Override
+	public int getWeekNumber() {
+		int year = cycleValues[2];
+		int thisDate = toFixed();
+		int anchor = new CQJulianCalendar(4, 1, year).toFixed();
+		anchor -= amod(anchor, 7);
+		if (thisDate < anchor) {
+			year--;
+			anchor = new CQJulianCalendar(4, 1, year).toFixed();
+			anchor -= amod(anchor, 7);
+		}
+		int dayInYear = thisDate - anchor;
+		int retval = 1 + (dayInYear - 1) / 7;
+		return retval;
 	}
 
 	@Override
