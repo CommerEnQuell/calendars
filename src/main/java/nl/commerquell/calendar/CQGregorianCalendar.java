@@ -47,7 +47,7 @@ public class CQGregorianCalendar extends CQCalendar {
 
 	@Override
 	public boolean inLeapYear() {
-		return testLeap(cycleValues[2], n -> (n % 4 == 0 && (n % 100 != 0 || n % 400 == 0)));
+		return testOneInt(cycleValues[2], n -> (n % 4 == 0 && (n % 100 != 0 || n % 400 == 0)));
 	}
 
 	@Override

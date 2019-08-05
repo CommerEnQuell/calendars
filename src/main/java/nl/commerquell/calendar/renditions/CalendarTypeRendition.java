@@ -10,6 +10,7 @@ public class CalendarTypeRendition implements Serializable {
 	private String[] cycleNames;
 	private String[] monthNames;
 	private String[] daysOfWeek;
+	private String startOfDay;
 	
 	
 	public CalendarTypeRendition(CQCalendar calendar) {
@@ -19,6 +20,7 @@ public class CalendarTypeRendition implements Serializable {
 	private void initFromCalendar(CQCalendar calendar) {
 		this.type = calendar.getCalendarType();
 		this.daysOfWeek = CQCalendar.getDaysOfWeek();
+		this.startOfDay = calendar.getStartOfDay().toString();
 		if (calendar.getClass().isAnnotationPresent(Cycles.class)) {
 			Cycles c = calendar.getClass().getAnnotation(Cycles.class);
 			String[] cycleNames = c.cycles();
@@ -53,6 +55,10 @@ public class CalendarTypeRendition implements Serializable {
 		String[] retval = new String[monthNames.length];
 		System.arraycopy(this.monthNames, 0, retval, 0, this.monthNames.length);
 		return retval;
+	}
+	
+	public String getStartOfDay() {
+		return this.startOfDay;
 	}
 
 }

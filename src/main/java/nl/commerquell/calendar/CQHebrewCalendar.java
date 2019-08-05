@@ -13,6 +13,7 @@ public class CQHebrewCalendar extends CQCalendar {
 	private CQHebrewCalendar() {
 		super();
 		this.cycleValues = new int[3];
+		this.startOfDay = StartOfDay.SUNSET;
 	}
 	
 	public CQHebrewCalendar(int day, int month, int year) {
@@ -50,7 +51,7 @@ public class CQHebrewCalendar extends CQCalendar {
 
 	@Override
 	public boolean inLeapYear() {
-		return testLeap(cycleValues[2], n -> (7 * n + 1) % 19 < 7);
+		return testOneInt(cycleValues[2], n -> (7 * n + 1) % 19 < 7);
 	}
 
 	@Override
@@ -78,11 +79,11 @@ public class CQHebrewCalendar extends CQCalendar {
 	}
 	
 	public boolean longHeshvan() {
-		return testLeap(lengthOfYear(cycleValues[2]), l -> l % 10 == 5);
+		return testOneInt(lengthOfYear(cycleValues[2]), l -> l % 10 == 5);
 	}
 	
 	public boolean shortKislev() {
-		return testLeap(lengthOfYear(cycleValues[2]), l -> l % 10 == 3);
+		return testOneInt(lengthOfYear(cycleValues[2]), l -> l % 10 == 3);
 	}
 	
 	private int[] getMonthLengths() {

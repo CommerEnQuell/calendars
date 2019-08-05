@@ -40,7 +40,7 @@ public class CQCalendarPicker {
 		case 3:		// Most calendars
 			retval = (CQCalendar) theConstructor.newInstance(cycles[0], cycles[1], cycles[2]);
 			break;
-		case 4:		// Chinese
+		case 4:		// Chinese, Tzolkin/Haab
 			retval = (CQCalendar) theConstructor.newInstance(cycles[0], cycles[1], cycles[2], cycles[3]);
 			break;
 		case 5:	// Long Count
@@ -71,6 +71,9 @@ public class CQCalendarPicker {
 			break;
 		case 3:
 			retval = CQHebrewCalendar.class;
+			break;
+		case 4:
+			retval = CQIslamicCalendar.class;
 			break;
 		default:
 			throw new IllegalArgumentException("No existing calendar of type " + type + " available");

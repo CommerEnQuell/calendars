@@ -44,7 +44,7 @@ public class CQJulianCalendar extends CQCalendar {
 
 	@Override
 	public boolean inLeapYear() {
-		return testLeap(cycleValues[2], year -> (year + (year < 0 ? 1 : 0)) % 4 == 0);
+		return testOneInt(cycleValues[2], year -> (year + (year < 0 ? 1 : 0)) % 4 == 0);
 	}
 
 	@Override

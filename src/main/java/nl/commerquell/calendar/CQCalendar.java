@@ -1,5 +1,9 @@
 package nl.commerquell.calendar;
 
+import java.lang.reflect.Constructor;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 import nl.commerquell.calendar.error.BogusDateException;
@@ -14,8 +18,11 @@ public abstract class CQCalendar {
 	public static final int YEAR = 2;
 	
 	protected int[] cycleValues;
+	protected StartOfDay startOfDay;
 	
-	protected CQCalendar() {}
+	protected CQCalendar() {
+		this.startOfDay = StartOfDay.MIDNIGHT;
+	}
 	
 	public abstract int toFixed();
 
@@ -24,8 +31,12 @@ public abstract class CQCalendar {
 	public abstract boolean isValid();
 	public abstract int getCalendarType();
 	
-	protected boolean testLeap(int n, Predicate<Integer> p) {
+	protected boolean testOneInt(int n, Predicate<Integer> p) {
 		return p.test(n);
+	}
+	
+	protected boolean testTwoInts(int m, int n, BiPredicate<Integer, Integer> bp) {
+		return bp.test(m, n);
 	}
 	
 	public int[] getCycleValues() {
@@ -97,11 +108,81 @@ public abstract class CQCalendar {
 		return days;
 	}
 	
-	public static int diff(CQCalendar ldate, CQCalendar rdate) {
+	public static final int diff(CQCalendar ldate, CQCalendar rdate) {
 		return rdate.toFixed() - ldate.toFixed();
+	}
+	
+	public static boolean isLeapYear(Class<? extends CQCalendar> calendar, int year) {
+		Cycles c = calendar.getAnnotation(Cycles.class);
+		if (c == null) {
+			throw new IllegalArgumentException("No cycles defined on class " + calendar.getName());
+		}
+		int cycles = c.cycles().length;
+		if (c.yearIndex() < 0 || c.yearIndex() >= cycles) {
+			return false;
+		}
+		int[] sample = new int[cycles];
+		for (int i = 0; i < cycles; i++) {
+			sample[i] = 1;
+		}
+		sample[c.yearIndex()] = year;
+		RuntimeException rx = null;
+		CQCalendar sampleDate = null;
+		try {
+			Constructor<?> cons = null;
+			switch (cycles) {
+			case 2:
+				cons = calendar.getDeclaredConstructor(int.class, int.class);
+				sampleDate = (CQCalendar) cons.newInstance(sample[0], sample[1]);
+				break;
+			case 3:
+				cons = calendar.getDeclaredConstructor(int.class, int.class, int.class);
+				sampleDate = (CQCalendar) cons.newInstance(sample[0], sample[1], sample[2]);
+				break;
+			case 4:
+				cons = calendar.getDeclaredConstructor(int.class, int.class, int.class, int.class);
+				sampleDate = (CQCalendar) cons.newInstance(sample[0], sample[1], sample[2], sample[3]);
+				break;
+			case 5:
+				cons = calendar.getDeclaredConstructor(int.class, int.class, int.class, int.class, int.class);
+				sampleDate = (CQCalendar) cons.newInstance(sample[0], sample[1], sample[2], sample[3], sample[4]);
+				break;
+			default:
+				rx = new RuntimeException("No constructor with " + cycles + " int parameters available for " + calendar.getName());
+				break;
+			}
+		} catch (Exception x) {
+			if (!(x instanceof RuntimeException)) {
+				rx = new RuntimeException(x);
+			} else {
+				rx = (RuntimeException) x;
+			}
+		}
+		if (rx != null) {
+			throw rx;
+		}
+		return sampleDate.inLeapYear();
 	}
 	
 	public final int dayOfCalendar() {
 		return toFixed() + 1 - epoch();
+	}
+	
+	protected static final int ceiling(double d) {
+		BigDecimal bd = BigDecimal.valueOf(d);
+		boolean fractional = false;
+		BigInteger bi = bd.toBigInteger();
+		try {
+			@SuppressWarnings("unused")
+			BigInteger bie = bd.toBigIntegerExact();
+		} catch (ArithmeticException ax) {
+			fractional = true;
+		}
+		int retval = bi.intValue() + (fractional ? 1 : 0);
+	 	return retval;
+	}
+	
+	public final StartOfDay getStartOfDay() {
+		return this.startOfDay;
 	}
 }
